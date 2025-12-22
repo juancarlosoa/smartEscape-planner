@@ -29,11 +29,18 @@ public class ItineraryRepository : IItineraryRepository
     public async Task<List<Itinerary>> ListAsync(CancellationToken ct = default)
         => await _context.Itineraries.ToListAsync(ct);
 
-    public async Task<Itinerary?> GetBySlugAsync(string slug, CancellationToken ct = default)
-        => await _context.Itineraries.Include(c => c.ItineraryDays)
+    public async Task<Itinerary?> GetBySlugAsync(string userSlug, string slug, CancellationToken ct = default)
+        => await _context.Itineraries
+            .Include(c => c.ItineraryDays)
             .ThenInclude(d => d.ItineraryStops)
-            .FirstOrDefaultAsync(c => c.Slug == Slug.Create(slug), ct);
+            .ThenInclude(s => s.EscapeRoom)
+            .FirstOrDefaultAsync(c => c.UserSlug == Slug.Create(userSlug) && c.Slug == Slug.Create(slug), ct);
 
-    public async Task<bool> SlugExistsAsync(string slug, CancellationToken ct = default)
-        => await _context.Itineraries.AnyAsync(c => c.Slug == Slug.Create(slug), ct);
+    public async Task<List<Itinerary>> GetByUserSlugAsync(string userSlug, CancellationToken ct = default)
+        => await _context.Itineraries
+            .Where(c => c.UserSlug == Slug.Create(userSlug))
+            .ToListAsync(ct);
+
+    public async Task<bool> SlugExistsAsync(string userSlug, string slug, CancellationToken ct = default)
+        => await _context.Itineraries.AnyAsync(c => c.UserSlug == Slug.Create(userSlug) && c.Slug == Slug.Create(slug), ct);
 }

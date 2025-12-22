@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PCE.Modules.ItineraryManagement.Domain.Entities;
+using PCE.Shared.Abstractions.Domain;
 using PCE.Shared.Abstractions.Persistence;
 
 namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence;
@@ -20,12 +21,40 @@ public class ItineraryManagementDbContext(DbContextOptions<ItineraryManagementDb
                 .IsRequired()
                 .HasMaxLength(100);
 
-            entity.HasIndex(e => e.Slug).IsUnique();
+            entity.Property(e => e.Slug)
+                .HasConversion(v => v.Value, v => Slug.Create(v))
+                .IsRequired();
+
+            entity.Property(e => e.UserSlug)
+                .HasConversion(v => v.Value, v => Slug.Create(v))
+                .IsRequired();
 
             entity.HasMany(i => i.ItineraryDays)
                 .WithOne(d => d.Itinerary)
                 .HasForeignKey(d => d.ItineraryId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ItineraryDay>(entity =>
+        {
+            entity.ToTable("ItineraryDays");
+            entity.HasKey(e => e.Id);
+
+            entity.HasMany(d => d.ItineraryStops)
+                .WithOne(s => s.ItineraryDay)
+                .HasForeignKey(s => s.ItineraryDayId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ItineraryStop>(entity =>
+        {
+            entity.ToTable("ItineraryStops");
+            entity.HasKey(e => e.Id);
+
+            entity.HasOne(s => s.EscapeRoom)
+                .WithMany()
+                .HasForeignKey(s => s.EscapeRoomId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         base.OnModelCreating(modelBuilder);

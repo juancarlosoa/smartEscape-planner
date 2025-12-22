@@ -21,13 +21,23 @@ public class Company : BaseEntity
 
     private Company() { }
 
-    public static Company Create(string name, string email, string phone, double latitude, double longitude, string? address = null, string? website = null)
+    public static Company Create(
+        string name,
+        string email,
+        string phone,
+        double latitude,
+        double longitude,
+        string? address = null,
+        string? website = null)
     {
+        var id = Guid.NewGuid();
+        var slug = Slug.Create(name);
+
         return new Company
         {
-            Id = Guid.NewGuid(),
+            Id = id,
             Name = name,
-            Slug = Slug.Create(name),
+            Slug = slug,
             Email = email,
             Phone = phone,
             Address = address,
@@ -38,7 +48,14 @@ public class Company : BaseEntity
         };
     }
 
-    public void Update(string name, string email, string phone, double latitude, double longitude, string? address = null, string? website = null)
+    public void Update(
+        string name,
+        string email,
+        string phone,
+        double latitude,
+        double longitude,
+        string? address = null,
+        string? website = null)
     {
         if (Name != name)
         {

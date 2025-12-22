@@ -5,6 +5,7 @@ namespace PCE.Modules.ItineraryManagement.Domain.Repositories;
 
 public interface IItineraryRepository : IRepository<Itinerary>
 {
-    Task<Itinerary?> GetBySlugAsync(string slug, CancellationToken ct = default);
-    Task<bool> SlugExistsAsync(string slug, CancellationToken ct = default);
+    Task<Itinerary?> GetBySlugAsync(string userSlug, string slug, CancellationToken ct = default);
+    Task<List<Itinerary>> GetByUserSlugAsync(string userSlug, CancellationToken ct = default);
+    Task<bool> SlugExistsAsync(string userSlug, string slug, CancellationToken ct = default);
 }
