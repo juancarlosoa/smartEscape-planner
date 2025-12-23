@@ -21,18 +21,18 @@ public class RemoveItineraryStopCommandHandler : IRequestHandler<RemoveItinerary
         var itinerary = await _repository.GetBySlugAsync(request.UserSlug, request.ItinerarySlug, cancellationToken);
         if (itinerary is null)
         {
-            return Result.Failure(Error.NotFound("Itinerary.NotFound", $"Itinerary with slug {request.ItinerarySlug} for user {request.UserSlug} was not found."));
+            return Result.Failure("Itinerary.NotFound", $"Itinerary with slug {request.ItinerarySlug} for user {request.UserSlug} was not found.");
         }
 
         var day = itinerary.ItineraryDays.FirstOrDefault(d => d.Id == request.DayId);
         if (day is null)
         {
-            return Result.Failure(Error.NotFound("ItineraryDay.NotFound", $"ItineraryDay with id {request.DayId} was not found in itinerary {request.ItinerarySlug}."));
+            return Result.Failure("ItineraryDay.NotFound", $"ItineraryDay with id {request.DayId} was not found in itinerary {request.ItinerarySlug}.");
         }
 
         if (!day.ItineraryStops.Any(s => s.Id == request.StopId))
         {
-            return Result.Failure(Error.NotFound("ItineraryStop.NotFound", $"ItineraryStop with id {request.StopId} was not found in day {request.DayId}."));
+            return Result.Failure("ItineraryStop.NotFound", $"ItineraryStop with id {request.StopId} was not found in day {request.DayId}.");
         }
 
         itinerary.RemoveStopFromDay(request.DayId, request.StopId);

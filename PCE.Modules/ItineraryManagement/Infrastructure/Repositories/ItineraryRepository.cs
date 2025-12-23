@@ -33,7 +33,6 @@ public class ItineraryRepository : IItineraryRepository
         => await _context.Itineraries
             .Include(c => c.ItineraryDays)
             .ThenInclude(d => d.ItineraryStops)
-            .ThenInclude(s => s.EscapeRoom)
             .FirstOrDefaultAsync(c => c.UserSlug == Slug.Create(userSlug) && c.Slug == Slug.Create(slug), ct);
 
     public async Task<List<Itinerary>> GetByUserSlugAsync(string userSlug, CancellationToken ct = default)

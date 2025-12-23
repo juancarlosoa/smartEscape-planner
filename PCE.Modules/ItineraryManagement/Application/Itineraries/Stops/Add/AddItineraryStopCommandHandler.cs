@@ -21,13 +21,13 @@ public class AddItineraryStopCommandHandler : IRequestHandler<AddItineraryStopCo
         var itinerary = await _repository.GetBySlugAsync(request.UserSlug, request.ItinerarySlug, cancellationToken);
         if (itinerary is null)
         {
-            return Result<Guid>.Failure(Error.NotFound("Itinerary.NotFound", $"Itinerary with slug {request.ItinerarySlug} for user {request.UserSlug} was not found."));
+            return Result<Guid>.Failure("Itinerary.NotFound", $"Itinerary with slug {request.ItinerarySlug} for user {request.UserSlug} was not found.");
         }
 
         var stop = itinerary.AddStopToDay(request.DayId, request.EscapeRoomId, request.Notes);
         if (stop is null)
         {
-             return Result<Guid>.Failure(Error.NotFound("ItineraryDay.NotFound", $"ItineraryDay with id {request.DayId} was not found in itinerary {request.ItinerarySlug}."));
+            return Result<Guid>.Failure("ItineraryDay.NotFound", $"ItineraryDay with id {request.DayId} was not found in itinerary {request.ItinerarySlug}.");
         }
 
         _repository.Update(itinerary);

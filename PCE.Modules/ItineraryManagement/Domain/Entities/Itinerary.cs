@@ -56,7 +56,6 @@ public class Itinerary : BaseEntity
         StartDate = startDate;
         EndDate = endDate;
     }
-    }
 
     public ItineraryDay AddDay(DateOnly date)
     {

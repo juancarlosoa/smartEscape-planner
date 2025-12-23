@@ -29,7 +29,7 @@ public class CreateItineraryCommandHandler : IRequestHandler<CreateItineraryComm
 
         if (await _repository.SlugExistsAsync(itinerary.UserSlug.Value, itinerary.Slug.Value, cancellationToken))
         {
-             return Result<string>.Failure(Error.Conflict("Itinerary.Conflict", "Itinerary with this name already exists for the user."));
+            return Result<string>.Failure("Itinerary.Conflict", "Itinerary with this name already exists for the user.");
         }
 
         await _repository.AddAsync(itinerary, cancellationToken);

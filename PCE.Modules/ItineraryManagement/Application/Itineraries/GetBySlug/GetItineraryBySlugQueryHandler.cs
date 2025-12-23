@@ -23,7 +23,7 @@ public class GetItineraryBySlugQueryHandler : IRequestHandler<GetItineraryBySlug
 
         if (itinerary is null)
         {
-            return Result<ItineraryDto>.Failure(Error.NotFound("Itinerary.NotFound", $"Itinerary with slug {request.Slug} for user {request.UserSlug} was not found."));
+            return Result<ItineraryDto>.Failure("Itinerary.NotFound", $"Itinerary with slug {request.Slug} for user {request.UserSlug} was not found.");
         }
 
         return Result<ItineraryDto>.Success(_mapper.MapToDto(itinerary));

@@ -21,12 +21,12 @@ public class RemoveItineraryDayCommandHandler : IRequestHandler<RemoveItineraryD
         var itinerary = await _repository.GetBySlugAsync(request.UserSlug, request.ItinerarySlug, cancellationToken);
         if (itinerary is null)
         {
-            return Result.Failure(Error.NotFound("Itinerary.NotFound", $"Itinerary with slug {request.ItinerarySlug} for user {request.UserSlug} was not found."));
+            return Result.Failure("Itinerary.NotFound", $"Itinerary with slug {request.ItinerarySlug} for user {request.UserSlug} was not found.");
         }
 
         if (!itinerary.ItineraryDays.Any(d => d.Id == request.DayId))
         {
-            return Result.Failure(Error.NotFound("ItineraryDay.NotFound", $"ItineraryDay with id {request.DayId} was not found in itinerary {request.ItinerarySlug}."));
+            return Result.Failure("ItineraryDay.NotFound", $"ItineraryDay with id {request.DayId} was not found in itinerary {request.ItinerarySlug}.");
         }
 
         itinerary.RemoveDay(request.DayId);

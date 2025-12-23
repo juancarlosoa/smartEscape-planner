@@ -50,11 +50,6 @@ public class ItineraryManagementDbContext(DbContextOptions<ItineraryManagementDb
         {
             entity.ToTable("ItineraryStops");
             entity.HasKey(e => e.Id);
-
-            entity.HasOne(s => s.EscapeRoom)
-                .WithMany()
-                .HasForeignKey(s => s.EscapeRoomId)
-                .OnDelete(DeleteBehavior.Restrict);
         });
 
         base.OnModelCreating(modelBuilder);

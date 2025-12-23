@@ -21,7 +21,7 @@ public class DeleteItineraryCommandHandler : IRequestHandler<DeleteItineraryComm
         var itinerary = await _repository.GetBySlugAsync(request.UserSlug, request.Slug, cancellationToken);
         if (itinerary is null)
         {
-            return Result.Failure(Error.NotFound("Itinerary.NotFound", $"Itinerary with slug {request.Slug} for user {request.UserSlug} was not found."));
+            return Result.Failure("Itinerary.NotFound", $"Itinerary with slug {request.Slug} for user {request.UserSlug} was not found.");
         }
 
         _repository.Remove(itinerary);

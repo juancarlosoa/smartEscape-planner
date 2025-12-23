@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PCE.Modules.ItineraryManagement.Application.Itineraries.Mappers;
 using PCE.Modules.ItineraryManagement.Domain.Repositories;
 using PCE.Modules.ItineraryManagement.Infrastructure.Persistence;
 using PCE.Modules.ItineraryManagement.Infrastructure.Repositories;
@@ -20,7 +21,7 @@ public static class ItineraryManagementModule
 
         services.AddScoped<IItineraryRepository, ItineraryRepository>();
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ItineraryManagementDbContext>());
-
+        services.AddScoped<ItineraryMapper>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ItineraryManagementModule).Assembly));
 
         return services;

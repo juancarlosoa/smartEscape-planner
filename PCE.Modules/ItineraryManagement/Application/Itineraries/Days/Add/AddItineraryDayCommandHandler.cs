@@ -21,7 +21,7 @@ public class AddItineraryDayCommandHandler : IRequestHandler<AddItineraryDayComm
         var itinerary = await _repository.GetBySlugAsync(request.UserSlug, request.ItinerarySlug, cancellationToken);
         if (itinerary is null)
         {
-            return Result<Guid>.Failure(Error.NotFound("Itinerary.NotFound", $"Itinerary with slug {request.ItinerarySlug} for user {request.UserSlug} was not found."));
+            return Result<Guid>.Failure("Itinerary.NotFound", $"Itinerary with slug {request.ItinerarySlug} for user {request.UserSlug} was not found.");
         }
 
         var day = itinerary.AddDay(request.Date);
