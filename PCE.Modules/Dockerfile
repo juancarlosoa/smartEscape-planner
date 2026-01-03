@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-COPY planea-con-enanos.sln ./
+COPY SmartEscape-Planner.sln ./
 COPY PCE.Modules/PCE.Modules.csproj PCE.Modules/
 COPY PCE.Shared/PCE.Shared.csproj PCE.Shared/
 

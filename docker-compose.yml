@@ -62,6 +62,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__EscapeManagement=Host=postgres;Database=${ESCAPE_MANAGEMENT_DB};Username=${DB_USER};Password=${DB_PASSWORD}
+      - ConnectionStrings__ItineraryManagement=Host=postgres;Database=${ITINERARY_MANAGEMENT_DB};Username=${DB_USER};Password=${DB_PASSWORD}
       - INTERNAL_SECRET=${INTERNAL_SECRET}
 
   frontend:

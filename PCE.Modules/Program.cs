@@ -4,6 +4,8 @@ using PCE.Modules.EscapeManagement;
 using PCE.Modules.Infrastructure.Security;
 using PCE.Modules.Location;
 using PCE.Modules.ItineraryManagement;
+using PCE.Modules.EscapeManagement.Infrastructure.Persistence;
+using PCE.Modules.ItineraryManagement.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,8 +35,11 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<PCE.Modules.EscapeManagement.Infrastructure.Persistence.EscapeManagementDbContext>();
-    dbContext.Database.Migrate();
+    var escapeDbContext = scope.ServiceProvider.GetRequiredService<EscapeManagementDbContext>();
+    escapeDbContext.Database.Migrate();
+
+    var itineraryDbContext = scope.ServiceProvider.GetRequiredService<ItineraryManagementDbContext>();
+    itineraryDbContext.Database.Migrate();
 }
 
 app.Run();
