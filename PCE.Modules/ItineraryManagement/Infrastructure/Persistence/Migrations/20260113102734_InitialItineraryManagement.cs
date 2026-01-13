@@ -31,34 +31,13 @@ namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ItineraryDays",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    DayNumber = table.Column<int>(type: "integer", nullable: false),
-                    Date = table.Column<DateOnly>(type: "date", nullable: false),
-                    ItineraryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ItineraryDays", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ItineraryDays_Itineraries_ItineraryId",
-                        column: x => x.ItineraryId,
-                        principalTable: "Itineraries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ItineraryStops",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Notes = table.Column<string>(type: "text", nullable: false),
-                    ItineraryDayId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScheduledTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ItineraryId = table.Column<Guid>(type: "uuid", nullable: false),
                     EscapeRoomId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -67,22 +46,17 @@ namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_ItineraryStops", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ItineraryStops_ItineraryDays_ItineraryDayId",
-                        column: x => x.ItineraryDayId,
-                        principalTable: "ItineraryDays",
+                        name: "FK_ItineraryStops_Itineraries_ItineraryId",
+                        column: x => x.ItineraryId,
+                        principalTable: "Itineraries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItineraryDays_ItineraryId",
-                table: "ItineraryDays",
-                column: "ItineraryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ItineraryStops_ItineraryDayId",
+                name: "IX_ItineraryStops_ItineraryId",
                 table: "ItineraryStops",
-                column: "ItineraryDayId");
+                column: "ItineraryId");
         }
 
         /// <inheritdoc />
@@ -90,9 +64,6 @@ namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ItineraryStops");
-
-            migrationBuilder.DropTable(
-                name: "ItineraryDays");
 
             migrationBuilder.DropTable(
                 name: "Itineraries");

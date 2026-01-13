@@ -8,24 +8,26 @@ export default ({ mode }: { mode: string }) => {
   const proxyTarget = env.VITE_PROXY_TARGET || 'http://gateway:2000'
 
   return defineConfig({
-  plugins: [vue()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-  server: {
-    proxy: {
-      '/api': {
-        target: proxyTarget,
-        changeOrigin: true,
-        secure: false,
+    plugins: [vue()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
       },
     },
-  },
-  build: {
-    outDir: 'dist',
-    sourcemap: false,
-  },
+    server: {
+      port: 3000,
+      strictPort: true,
+      proxy: {
+        '/api': {
+          target: proxyTarget,
+          changeOrigin: true,
+          secure: false,
+        },
+      },
+    },
+    build: {
+      outDir: 'dist',
+      sourcemap: false,
+    },
   })
 }

@@ -144,3 +144,44 @@ export interface MultiPointRouteResponse {
   totalDuration: number; // in seconds
   combinedGeometry: number[][]; // Complete route geometry
 }
+
+// Itinerary types
+export interface ItineraryListDto {
+  slug: string;
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+}
+
+export interface ItineraryStopDto {
+  id: string;
+  notes: string;
+  scheduledTime: string;
+  escapeRoomId: string;
+}
+
+
+export interface ItineraryDto {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  stops: ItineraryStopDto[];
+}
+
+export interface CreateItineraryRequest {
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+}
+
+export interface UpdateItineraryRequest {
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+}

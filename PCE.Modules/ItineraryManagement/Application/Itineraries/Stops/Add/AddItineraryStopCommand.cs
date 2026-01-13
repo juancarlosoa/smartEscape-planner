@@ -6,7 +6,7 @@ namespace PCE.Modules.ItineraryManagement.Application.Itineraries.Stops.Add;
 public record AddItineraryStopCommand(
     string UserSlug,
     string ItinerarySlug,
-    Guid DayId,
+    DateTime ScheduledTime,
     Guid EscapeRoomId,
     string Notes
 ) : IRequest<Result<Guid>>;

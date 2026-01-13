@@ -7,5 +7,5 @@ public record ItineraryDto(
     string Description,
     DateTime StartDate,
     DateTime EndDate,
-    List<ItineraryDayDto> Days
+    List<ItineraryStopDto> Stops
 );

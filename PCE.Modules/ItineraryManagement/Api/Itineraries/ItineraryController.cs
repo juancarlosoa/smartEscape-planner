@@ -13,6 +13,14 @@ namespace PCE.Modules.ItineraryManagement.Api.Itineraries;
 [Route("api/itineraries")]
 public class ItineraryController : ControllerBase
 {
+    // DTO for binding body without UserSlug
+    public record CreateItineraryRequest(
+        string Name,
+        string Description,
+        DateTime StartDate,
+        DateTime EndDate
+    );
+
     private readonly IMediator _mediator;
 
     public ItineraryController(IMediator mediator)
@@ -37,13 +45,20 @@ public class ItineraryController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateItineraryCommand command, CancellationToken ct)
+    public async Task<IActionResult> Create([FromBody] CreateItineraryRequest request, CancellationToken ct)
     {
         var userSlug = this.GetUserSlug();
         
-        // Crear nuevo command con el userSlug autenticado
-        var secureCommand = command with { UserSlug = userSlug };
-        var result = await _mediator.Send(secureCommand, ct);
+        // Map DTO to Command, injecting the UserSlug
+        var command = new CreateItineraryCommand(
+            userSlug,
+            request.Name,
+            request.Description,
+            request.StartDate,
+            request.EndDate
+        );
+
+        var result = await _mediator.Send(command, ct);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(new { error = result.Error });
     }
 

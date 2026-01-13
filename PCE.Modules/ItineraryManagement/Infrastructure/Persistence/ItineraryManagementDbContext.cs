@@ -9,6 +9,8 @@ public class ItineraryManagementDbContext(DbContextOptions<ItineraryManagementDb
 {
     public DbSet<Itinerary> Itineraries { get; set; } = null!;
 
+    public DbSet<ItineraryStop> ItineraryStops { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Itinerary>(entity =>
@@ -29,20 +31,9 @@ public class ItineraryManagementDbContext(DbContextOptions<ItineraryManagementDb
                 .HasConversion(v => v.Value, v => Slug.Create(v))
                 .IsRequired();
 
-            entity.HasMany(i => i.ItineraryDays)
+            entity.HasMany(i => i.ItineraryStops)
                 .WithOne(d => d.Itinerary)
                 .HasForeignKey(d => d.ItineraryId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-
-        modelBuilder.Entity<ItineraryDay>(entity =>
-        {
-            entity.ToTable("ItineraryDays");
-            entity.HasKey(e => e.Id);
-
-            entity.HasMany(d => d.ItineraryStops)
-                .WithOne(s => s.ItineraryDay)
-                .HasForeignKey(s => s.ItineraryDayId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 

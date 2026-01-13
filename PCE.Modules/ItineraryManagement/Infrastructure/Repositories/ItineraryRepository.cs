@@ -23,7 +23,7 @@ public class ItineraryRepository : IItineraryRepository
     public void Update(Itinerary entity) => _context.Itineraries.Update(entity);
 
     public async Task<Itinerary?> GetByIdAsync(Guid id, CancellationToken ct = default)
-        => await _context.Itineraries.Include(c => c.ItineraryDays)
+        => await _context.Itineraries.Include(c => c.ItineraryStops)
             .FirstOrDefaultAsync(c => c.Id == id, ct);
 
     public async Task<List<Itinerary>> ListAsync(CancellationToken ct = default)
@@ -31,8 +31,7 @@ public class ItineraryRepository : IItineraryRepository
 
     public async Task<Itinerary?> GetBySlugAsync(string userSlug, string slug, CancellationToken ct = default)
         => await _context.Itineraries
-            .Include(c => c.ItineraryDays)
-            .ThenInclude(d => d.ItineraryStops)
+            .Include(c => c.ItineraryStops)
             .FirstOrDefaultAsync(c => c.UserSlug == Slug.Create(userSlug) && c.Slug == Slug.Create(slug), ct);
 
     public async Task<List<Itinerary>> GetByUserSlugAsync(string userSlug, CancellationToken ct = default)

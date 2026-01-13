@@ -24,18 +24,13 @@ public class RemoveItineraryStopCommandHandler : IRequestHandler<RemoveItinerary
             return Result.Failure("Itinerary.NotFound", $"Itinerary with slug {request.ItinerarySlug} for user {request.UserSlug} was not found.");
         }
 
-        var day = itinerary.ItineraryDays.FirstOrDefault(d => d.Id == request.DayId);
-        if (day is null)
+        // Check if stop exists in itinerary directly
+        if (!itinerary.ItineraryStops.Any(s => s.Id == request.StopId))
         {
-            return Result.Failure("ItineraryDay.NotFound", $"ItineraryDay with id {request.DayId} was not found in itinerary {request.ItinerarySlug}.");
+            return Result.Failure("ItineraryStop.NotFound", $"ItineraryStop with id {request.StopId} was not found in itinerary {request.ItinerarySlug}.");
         }
 
-        if (!day.ItineraryStops.Any(s => s.Id == request.StopId))
-        {
-            return Result.Failure("ItineraryStop.NotFound", $"ItineraryStop with id {request.StopId} was not found in day {request.DayId}.");
-        }
-
-        itinerary.RemoveStopFromDay(request.DayId, request.StopId);
+        itinerary.RemoveStop(request.StopId);
 
         _repository.Update(itinerary);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

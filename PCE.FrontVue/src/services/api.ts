@@ -8,6 +8,19 @@ const apiClient: AxiosInstance = axios.create({
   },
 });
 
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('google_id_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  const userSlug = localStorage.getItem('user_slug');
+  if (userSlug) {
+    config.headers['X-User-Slug'] = userSlug;
+  }
+  return config;
+});
+
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {

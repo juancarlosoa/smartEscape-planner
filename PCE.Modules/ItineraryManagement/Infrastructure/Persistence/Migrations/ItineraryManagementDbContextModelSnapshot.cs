@@ -62,34 +62,6 @@ namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence.Migrations
                     b.ToTable("Itineraries", (string)null);
                 });
 
-            modelBuilder.Entity("PCE.Modules.ItineraryManagement.Domain.Entities.ItineraryDay", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<int>("DayNumber")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("ItineraryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItineraryId");
-
-                    b.ToTable("ItineraryDays", (string)null);
-                });
-
             modelBuilder.Entity("PCE.Modules.ItineraryManagement.Domain.Entities.ItineraryStop", b =>
                 {
                     b.Property<Guid>("Id")
@@ -102,27 +74,30 @@ namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("EscapeRoomId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ItineraryDayId")
+                    b.Property<Guid>("ItineraryId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("ScheduledTime")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItineraryDayId");
+                    b.HasIndex("ItineraryId");
 
                     b.ToTable("ItineraryStops", (string)null);
                 });
 
-            modelBuilder.Entity("PCE.Modules.ItineraryManagement.Domain.Entities.ItineraryDay", b =>
+            modelBuilder.Entity("PCE.Modules.ItineraryManagement.Domain.Entities.ItineraryStop", b =>
                 {
                     b.HasOne("PCE.Modules.ItineraryManagement.Domain.Entities.Itinerary", "Itinerary")
-                        .WithMany("ItineraryDays")
+                        .WithMany("ItineraryStops")
                         .HasForeignKey("ItineraryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -130,23 +105,7 @@ namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence.Migrations
                     b.Navigation("Itinerary");
                 });
 
-            modelBuilder.Entity("PCE.Modules.ItineraryManagement.Domain.Entities.ItineraryStop", b =>
-                {
-                    b.HasOne("PCE.Modules.ItineraryManagement.Domain.Entities.ItineraryDay", "ItineraryDay")
-                        .WithMany("ItineraryStops")
-                        .HasForeignKey("ItineraryDayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ItineraryDay");
-                });
-
             modelBuilder.Entity("PCE.Modules.ItineraryManagement.Domain.Entities.Itinerary", b =>
-                {
-                    b.Navigation("ItineraryDays");
-                });
-
-            modelBuilder.Entity("PCE.Modules.ItineraryManagement.Domain.Entities.ItineraryDay", b =>
                 {
                     b.Navigation("ItineraryStops");
                 });

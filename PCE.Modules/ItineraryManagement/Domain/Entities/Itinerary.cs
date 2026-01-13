@@ -12,8 +12,8 @@ public class Itinerary : BaseEntity
     public DateTime StartDate { get; private set; }
     public DateTime EndDate { get; private set; }
 
-    private readonly List<ItineraryDay> _itineraryDays = [];
-    public IReadOnlyCollection<ItineraryDay> ItineraryDays => _itineraryDays.AsReadOnly();
+    private readonly List<ItineraryStop> _itineraryStops = [];
+    public IReadOnlyCollection<ItineraryStop> ItineraryStops => _itineraryStops.AsReadOnly();
 
     public static Itinerary Create(
         string userSlug,
@@ -34,8 +34,8 @@ public class Itinerary : BaseEntity
             Name = name,
             Slug = slug,
             Description = description,
-            StartDate = startDate,
-            EndDate = endDate,
+            StartDate = startDate.ToUniversalTime(),
+            EndDate = endDate.ToUniversalTime(),
             CreatedAt = DateTime.UtcNow
         };
 
@@ -53,57 +53,32 @@ public class Itinerary : BaseEntity
             Slug = Slug.Create(name);
         }
         Description = description;
-        StartDate = startDate;
-        EndDate = endDate;
+        StartDate = startDate.ToUniversalTime();
+        EndDate = endDate.ToUniversalTime();
     }
 
-    public ItineraryDay AddDay(DateOnly date)
+    public ItineraryStop AddStop(Guid escapeRoomId, string notes, DateTime scheduledTime)
     {
-        var dayNumber = _itineraryDays.Count + 1;
-        var day = ItineraryDay.Create(dayNumber, date);
-        _itineraryDays.Add(day);
-        UpdatedAt = DateTime.UtcNow;
-        return day;
-    }
-
-    public void UpdateDay(Guid dayId, DateOnly date)
-    {
-        var day = _itineraryDays.FirstOrDefault(d => d.Id == dayId);
-        day?.Update(date);
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    public void RemoveDay(Guid dayId)
-    {
-        var day = _itineraryDays.FirstOrDefault(d => d.Id == dayId);
-        if (day != null)
-        {
-            _itineraryDays.Remove(day);
-            // Re-indexing day numbers could be added here if needed
-            UpdatedAt = DateTime.UtcNow;
-        }
-    }
-
-    public ItineraryStop? AddStopToDay(Guid dayId, Guid escapeRoomId, string notes)
-    {
-        var day = _itineraryDays.FirstOrDefault(d => d.Id == dayId);
-        if (day == null) return null;
-        var stop = day.AddStop(escapeRoomId, notes);
+        var stop = ItineraryStop.Create(Id, escapeRoomId, notes, scheduledTime);
+        _itineraryStops.Add(stop);
         UpdatedAt = DateTime.UtcNow;
         return stop;
     }
 
-    public void UpdateStopInDay(Guid dayId, Guid stopId, string notes)
+    public void UpdateStop(Guid stopId, string notes, DateTime scheduledTime)
     {
-        var day = _itineraryDays.FirstOrDefault(d => d.Id == dayId);
-        day?.UpdateStop(stopId, notes);
+        var stop = _itineraryStops.FirstOrDefault(s => s.Id == stopId);
+        stop?.Update(notes, scheduledTime);
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void RemoveStopFromDay(Guid dayId, Guid stopId)
+    public void RemoveStop(Guid stopId)
     {
-        var day = _itineraryDays.FirstOrDefault(d => d.Id == dayId);
-        day?.RemoveStop(stopId);
-        UpdatedAt = DateTime.UtcNow;
+        var stop = _itineraryStops.FirstOrDefault(s => s.Id == stopId);
+        if (stop != null)
+        {
+            _itineraryStops.Remove(stop);
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }
