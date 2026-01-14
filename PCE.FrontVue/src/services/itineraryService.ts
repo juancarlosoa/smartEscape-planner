@@ -71,10 +71,10 @@ export const itineraryService = {
     }
   },
 
-  async addStop(itinerarySlug: string, escapeRoomId: string, notes: string, scheduledTime: string): Promise<string> {
+  async addStop(itinerarySlug: string, escapeRoomSlug: string, notes: string, scheduledTime: string): Promise<string> {
     try {
       const response = await apiClient.post<string>(`/itineraries/${itinerarySlug}/stops`, {
-        escapeRoomId,
+        escapeRoomSlug,
         notes,
         scheduledTime
       });

@@ -4,5 +4,5 @@ public record ItineraryStopDto(
     Guid Id,
     string Notes,
     DateTime ScheduledTime,
-    string EscapeRoomId
+    string EscapeRoomSlug = null!
 );

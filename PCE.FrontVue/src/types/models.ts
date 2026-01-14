@@ -158,7 +158,7 @@ export interface ItineraryStopDto {
   id: string;
   notes: string;
   scheduledTime: string;
-  escapeRoomId: string;
+  escapeRoomSlug: string;
 }
 
 
@@ -184,4 +184,10 @@ export interface UpdateItineraryRequest {
   description: string;
   startDate: string;
   endDate: string;
+}
+
+export interface AddItineraryStopRequest {
+  scheduledTime: string;
+  escapeRoomSlug: string;
+  notes: string;
 }

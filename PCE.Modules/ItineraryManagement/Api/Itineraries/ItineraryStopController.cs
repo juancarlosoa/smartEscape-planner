@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PCE.Shared.Extensions;
-using PCE.Modules.ItineraryManagement.Application.Itineraries.Stops.Add;
-using PCE.Modules.ItineraryManagement.Application.Itineraries.Stops.Remove;
+using PCE.Modules.ItineraryManagement.Application.Stops.Add;
+using PCE.Modules.ItineraryManagement.Application.Stops.Remove;
 using PCE.Modules.ItineraryManagement.Application.Itineraries.Stops.Update;
 
 namespace PCE.Modules.ItineraryManagement.Api.Itineraries;

@@ -45,7 +45,8 @@ namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
@@ -55,7 +56,8 @@ namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("UserSlug")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.HasKey("Id");
 
@@ -79,7 +81,10 @@ namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Notes")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasDefaultValue("");
 
                     b.Property<DateTime>("ScheduledTime")
                         .HasColumnType("timestamp with time zone");

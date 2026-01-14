@@ -37,14 +37,15 @@ public class UpdateEscapeRoomCommandHandler : IRequestHandler<UpdateEscapeRoomCo
             request.PricePerPerson,
             request.Latitude,
             request.Longitude,
-            request.Address);
+            request.Address
+        );
 
         if (escapeRoom.Slug.Value != request.Slug)
         {
-             if (await _repository.SlugExistsAsync(escapeRoom.Slug.Value, cancellationToken))
-             {
-                 return Result<string>.Failure("EscapeRoom with this name/slug already exists", "EscapeRoom.SlugAlreadyExists");
-             }
+            if (await _repository.SlugExistsAsync(escapeRoom.Slug.Value, cancellationToken))
+            {
+                return Result<string>.Failure("EscapeRoom with this name/slug already exists", "EscapeRoom.SlugAlreadyExists");
+            }
         }
 
         _repository.Update(escapeRoom);

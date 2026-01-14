@@ -8,7 +8,7 @@ namespace PCE.Modules.ItineraryManagement.Application.Itineraries.Mappers;
 public partial class ItineraryMapper
 {
     [MapProperty("Slug.Value", nameof(ItineraryDto.Slug))]
-    [MapProperty(nameof(Itinerary.ItineraryStops), nameof(ItineraryDto.Stops))] 
+    [MapProperty(nameof(Itinerary.ItineraryStops), nameof(ItineraryDto.Stops))]
     public partial ItineraryDto MapToDto(Itinerary itinerary);
 
     [MapProperty("Slug.Value", nameof(ItineraryListDto.Slug))]

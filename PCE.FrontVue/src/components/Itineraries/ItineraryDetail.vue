@@ -50,14 +50,14 @@
               <div v-if="day.stops.length === 0" class="empty-stops">
                 <i class="fas fa-map-marker-alt"></i>
                 <p>No hay paradas planificadas para este día</p>
-                <button class="btn btn-sm btn-outline-primary" @click="console.log('Add stop to', day.date)">
+                <button class="btn btn-sm btn-outline-primary" @click="openAddStopModal(day.date)">
                     <i class="fas fa-plus"></i> Añadir Parada
                 </button>
               </div>
 
               <div v-else class="stops-list">
                 <div
-                  v-for="stop in day.stops"
+                  v-for="(stop, _index) in day.stops"
                   :key="stop.id"
                   class="stop-item"
                 >
@@ -69,11 +69,11 @@
                   </div>
                   <div class="stop-content">
                     <div class="stop-notes">{{ stop.notes || 'Sin notas' }}</div>
-                    <div class="stop-room">Sala ID: {{ stop.escapeRoomId }}</div>
+                    <div class="stop-room">Sala ID: {{ stop.escapeRoomSlug }}</div>
                   </div>
                 </div>
                  <div class="add-more-stops">
-                    <button class="btn btn-sm btn-outline-primary" @click="console.log('Add another stop to', day.date)">
+                    <button class="btn btn-sm btn-outline-primary" @click="openAddStopModal(day.date)">
                         <i class="fas fa-plus"></i> Añadir Parada
                     </button>
                 </div>
@@ -83,6 +83,15 @@
         </div>
       </div>
     </div>
+
+    <!-- Add Stop Modal -->
+    <AddStopModal 
+      :show="showAddStopModal" 
+      :itinerary-slug="props.slug"
+      :prefilled-date="selectedDate"
+      @close="showAddStopModal = false"
+      @stop-added="handleStopAdded"
+    />
   </div>
 </template>
 
@@ -90,6 +99,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { itineraryService } from '../../services/itineraryService';
 import type { ItineraryDto, ItineraryStopDto } from '../../types/models';
+import AddStopModal from './AddStopModal.vue';
 
 interface Props {
   slug: string;
@@ -111,6 +121,11 @@ const emit = defineEmits<{
 const itinerary = ref<ItineraryDto | null>(null);
 const loading = ref(true);
 const error = ref<string | null>(null);
+
+// Add Stop Modal State
+const showAddStopModal = ref(false);
+const selectedDate = ref<Date | undefined>(undefined);
+
 
 const computedDays = computed<DayWithStops[]>(() => {
   if (!itinerary.value) return [];
@@ -197,6 +212,15 @@ const formatTime = (dateString: string) => {
         hour: '2-digit',
         minute: '2-digit'
     });
+};
+
+const openAddStopModal = (date: Date) => {
+  selectedDate.value = date;
+  showAddStopModal.value = true;
+};
+
+const handleStopAdded = async () => {
+  await loadItinerary();
 };
 
 onMounted(() => {
@@ -394,5 +418,28 @@ onMounted(() => {
 
 .btn-danger:hover {
   background-color: #c82333;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.btn-outline-primary {
+  background: transparent;
+  border: 1px solid #007bff;
+  color: #007bff;
+}
+
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.add-more-stops {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed #e9ecef;
+  text-align: center;
 }
 </style>

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using PCE.Modules.ItineraryManagement.Domain.Entities;
 using PCE.Shared.Abstractions.Domain;
 using PCE.Shared.Abstractions.Persistence;
@@ -24,12 +25,18 @@ public class ItineraryManagementDbContext(DbContextOptions<ItineraryManagementDb
                 .HasMaxLength(100);
 
             entity.Property(e => e.Slug)
-                .HasConversion(v => v.Value, v => Slug.Create(v))
-                .IsRequired();
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasConversion(
+                        v => v.Value,
+                        v => Slug.Create(v));
 
             entity.Property(e => e.UserSlug)
-                .HasConversion(v => v.Value, v => Slug.Create(v))
-                .IsRequired();
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasConversion(
+                        v => v.Value,
+                        v => Slug.Create(v));
 
             entity.HasMany(i => i.ItineraryStops)
                 .WithOne(d => d.Itinerary)
@@ -41,6 +48,14 @@ public class ItineraryManagementDbContext(DbContextOptions<ItineraryManagementDb
         {
             entity.ToTable("ItineraryStops");
             entity.HasKey(e => e.Id);
+
+            entity.Property(x => x.Notes)
+                .HasMaxLength(500)
+                .IsRequired()
+                .HasDefaultValue("");
+
+            entity.Property(x => x.ScheduledTime)
+                .IsRequired();
         });
 
         base.OnModelCreating(modelBuilder);

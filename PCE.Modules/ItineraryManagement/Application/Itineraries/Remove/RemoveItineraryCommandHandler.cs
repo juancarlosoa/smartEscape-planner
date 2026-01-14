@@ -3,20 +3,20 @@ using PCE.Modules.ItineraryManagement.Domain.Repositories;
 using PCE.Shared.Abstractions.Persistence;
 using PCE.Shared.Primitives;
 
-namespace PCE.Modules.ItineraryManagement.Application.Itineraries.Delete;
+namespace PCE.Modules.ItineraryManagement.Application.Itineraries.Remove;
 
-public class DeleteItineraryCommandHandler : IRequestHandler<DeleteItineraryCommand, Result>
+public class RemoveItineraryCommandHandler : IRequestHandler<RemoveItineraryCommand, Result>
 {
     private readonly IItineraryRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteItineraryCommandHandler(IItineraryRepository repository, IUnitOfWork unitOfWork)
+    public RemoveItineraryCommandHandler(IItineraryRepository repository, IUnitOfWork unitOfWork)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result> Handle(DeleteItineraryCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(RemoveItineraryCommand request, CancellationToken cancellationToken)
     {
         var itinerary = await _repository.GetBySlugAsync(request.UserSlug, request.Slug, cancellationToken);
         if (itinerary is null)

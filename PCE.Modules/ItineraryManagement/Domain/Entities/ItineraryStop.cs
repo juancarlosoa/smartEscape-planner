@@ -5,7 +5,6 @@ namespace PCE.Modules.ItineraryManagement.Domain.Entities;
 public class ItineraryStop : BaseEntity
 {
     public string Notes { get; private set; } = string.Empty;
-
     public DateTime ScheduledTime { get; private set; }
 
     public Guid ItineraryId { get; private set; }
@@ -26,10 +25,11 @@ public class ItineraryStop : BaseEntity
         };
     }
 
-    public void Update(string notes, DateTime scheduledTime)
+    public void Update(string notes, Guid escapeRoomId, DateTime scheduledTime)
     {
         Notes = notes;
         ScheduledTime = scheduledTime.ToUniversalTime();
+        EscapeRoomId = escapeRoomId;
         UpdatedAt = DateTime.UtcNow;
     }
 }

@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PCE.Shared.Extensions;
 using PCE.Modules.ItineraryManagement.Application.Itineraries.Create;
-using PCE.Modules.ItineraryManagement.Application.Itineraries.Delete;
+using PCE.Modules.ItineraryManagement.Application.Itineraries.Remove;
 using PCE.Modules.ItineraryManagement.Application.Itineraries.GetAll;
 using PCE.Modules.ItineraryManagement.Application.Itineraries.GetBySlug;
 using PCE.Modules.ItineraryManagement.Application.Itineraries.Update;
@@ -48,7 +48,7 @@ public class ItineraryController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateItineraryRequest request, CancellationToken ct)
     {
         var userSlug = this.GetUserSlug();
-        
+
         // Map DTO to Command, injecting the UserSlug
         var command = new CreateItineraryCommand(
             userSlug,
@@ -66,7 +66,7 @@ public class ItineraryController : ControllerBase
     public async Task<IActionResult> Update(string slug, [FromBody] UpdateItineraryCommand command, CancellationToken ct)
     {
         var userSlug = this.GetUserSlug();
-        
+
         // Crear nuevo command con el userSlug autenticado
         var secureCommand = command with { UserSlug = userSlug, Slug = slug };
         var result = await _mediator.Send(secureCommand, ct);
@@ -74,10 +74,10 @@ public class ItineraryController : ControllerBase
     }
 
     [HttpDelete("{slug}")]
-    public async Task<IActionResult> Delete(string slug, CancellationToken ct)
+    public async Task<IActionResult> Remove(string slug, CancellationToken ct)
     {
         var userSlug = this.GetUserSlug();
-        var result = await _mediator.Send(new DeleteItineraryCommand(userSlug, slug), ct);
+        var result = await _mediator.Send(new RemoveItineraryCommand(userSlug, slug), ct);
         return result.IsSuccess ? NoContent() : BadRequest(new { error = result.Error });
     }
 }

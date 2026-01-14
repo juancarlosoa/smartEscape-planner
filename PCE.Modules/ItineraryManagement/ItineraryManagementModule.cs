@@ -20,6 +20,7 @@ public static class ItineraryManagementModule
         });
 
         services.AddScoped<IItineraryRepository, ItineraryRepository>();
+        services.AddScoped<IItineraryStopRepository, ItineraryStopRepository>();
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ItineraryManagementDbContext>());
         services.AddScoped<ItineraryMapper>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ItineraryManagementModule).Assembly));

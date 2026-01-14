@@ -56,29 +56,4 @@ public class Itinerary : BaseEntity
         StartDate = startDate.ToUniversalTime();
         EndDate = endDate.ToUniversalTime();
     }
-
-    public ItineraryStop AddStop(Guid escapeRoomId, string notes, DateTime scheduledTime)
-    {
-        var stop = ItineraryStop.Create(Id, escapeRoomId, notes, scheduledTime);
-        _itineraryStops.Add(stop);
-        UpdatedAt = DateTime.UtcNow;
-        return stop;
-    }
-
-    public void UpdateStop(Guid stopId, string notes, DateTime scheduledTime)
-    {
-        var stop = _itineraryStops.FirstOrDefault(s => s.Id == stopId);
-        stop?.Update(notes, scheduledTime);
-        UpdatedAt = DateTime.UtcNow;
-    }
-
-    public void RemoveStop(Guid stopId)
-    {
-        var stop = _itineraryStops.FirstOrDefault(s => s.Id == stopId);
-        if (stop != null)
-        {
-            _itineraryStops.Remove(stop);
-            UpdatedAt = DateTime.UtcNow;
-        }
-    }
 }

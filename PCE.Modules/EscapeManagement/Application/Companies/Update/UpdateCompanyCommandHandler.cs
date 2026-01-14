@@ -41,15 +41,16 @@ public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand,
             request.Latitude ?? company.Latitude,
             request.Longitude ?? company.Longitude,
             request.Address ?? company.Address,
-            request.Website);
+            request.Website
+        );
 
         // If name changed, slug might have changed, check uniqueness
         if (company.Slug.Value != request.Slug)
         {
-             if (await _repository.SlugExistsAsync(company.Slug.Value, cancellationToken))
-             {
-                 return Result<string>.Failure("Company with this name/slug already exists", "Company.SlugAlreadyExists");
-             }
+            if (await _repository.SlugExistsAsync(company.Slug.Value, cancellationToken))
+            {
+                return Result<string>.Failure("Company with this name/slug already exists", "Company.SlugAlreadyExists");
+            }
         }
 
         _repository.Update(company);

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialItineraryManagement : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,8 +16,8 @@ namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserSlug = table.Column<string>(type: "text", nullable: false),
-                    Slug = table.Column<string>(type: "text", nullable: false),
+                    UserSlug = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Slug = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -35,7 +35,7 @@ namespace PCE.Modules.ItineraryManagement.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Notes = table.Column<string>(type: "text", nullable: false),
+                    Notes = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false, defaultValue: ""),
                     ScheduledTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ItineraryId = table.Column<Guid>(type: "uuid", nullable: false),
                     EscapeRoomId = table.Column<Guid>(type: "uuid", nullable: false),
