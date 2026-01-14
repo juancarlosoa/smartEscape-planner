@@ -26,7 +26,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = true,
             ValidIssuer = "https://accounts.google.com",
             ValidateAudience = true,
-            ValidAudience = builder.Configuration["Jwt:Audience"] ?? builder.Configuration["Google:ClientId"],
+            ValidAudience = builder.Configuration["GOOGLE_CLIENTID"],
             ValidateLifetime = true,
         };
     });
@@ -50,22 +50,17 @@ builder.Services.AddReverseProxy()
             if (user.Identity?.IsAuthenticated == true)
             {
                 // Google ID Token "sub" is the unique user ID
-                var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value; 
+                var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 // Or use email if preferred for slug
                 var email = user.FindFirst(ClaimTypes.Email)?.Value;
 
                 // Using email as slug for readability as per previous logic, but sanitized
                 var userSlug = email?.Replace("@", "-").Replace(".", "-");
-                
+
                 if (!string.IsNullOrEmpty(userSlug))
                 {
                     transformContext.ProxyRequest.Headers.Add("X-User-Slug", userSlug);
                 }
-            }
-            else
-            {
-                // Optional: Block unauthenticated requests here or let downstream handle 401?
-                // For now, if not authenticated, we don't add the header, downstream will throw 401 via Extensions
             }
 
             return ValueTask.CompletedTask;
