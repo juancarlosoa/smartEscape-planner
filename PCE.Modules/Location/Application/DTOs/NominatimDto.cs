@@ -1,6 +1,6 @@
 namespace PCE.Modules.Location.Application.DTOs;
 
-public record LocationResultDto(
+public record NominatimDto(
     string Lat,
     string Lon,
     string DisplayName

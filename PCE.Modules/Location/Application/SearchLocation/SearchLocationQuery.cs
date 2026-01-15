@@ -9,4 +9,4 @@ public record SearchLocationQuery(
     string City,
     string State,
     string PostalCode,
-    string Country) : IRequest<Result<List<LocationResultDto>>>;
+    string Country) : IRequest<Result<List<NominatimDto>>>;
